@@ -2,6 +2,7 @@ package com.example.repository;
 
 import com.example.entity.Message;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 /** 
  * This is a data access repository class that manages the interactions Java
@@ -14,6 +15,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  *						                of account who posted message 
  * message_text         varchar(255)    Text of message 
  * time_posted_epoch	bigint		    Time message was posted 
- */ 
+ */
+@Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
 }

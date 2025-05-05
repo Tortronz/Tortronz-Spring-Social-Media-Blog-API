@@ -1,6 +1,7 @@
 package com.example.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.example.entity.Account;
@@ -30,29 +31,48 @@ public class AccountService {
 	 *          wasn't successfully persisted or if username or password were
 	 *          invalid 
 	 */ 
-	public Account registerAccount(Account account) { 
+	public ResponseEntity<Account> registerAccount(Account account) { 
 		// Check username isn't blank 
 		if(account.getUsername() == "") { 
-			return null; 
+			return ResponseEntity.status(400).body(null);
 		} 
 		// Check password is more than 4 characters 
 		if(account.getPassword().length() < 4) { 
-			return null; 
-		} 
+			return ResponseEntity.status(400).body(null); 
+		}
+
+		// Check there isn't an account already with the specified username
+		if(this.accountRepository.findByUsername(account.getUsername()) != null) {
+			return ResponseEntity.status(409).body(null);
+		}
  
-		return this.accountRepository.save(account); 
+
+		Account addedAccount = this.accountRepository.save(account);
+
+		if (addedAccount != null) { // Account successfully registered
+			return ResponseEntity.status(200).body(addedAccount);
+
+		} else { // Registration failed due to other error
+			return ResponseEntity.status(400).body(null);
+		}
 	} 
  
-	// READ OPERATIONS // 
 	/** 
-	 * This authorizes/logs in an account. 
+	 * This authorizes/logs in an account.
 	 *  
 	 * @param account   The account credientials attempting to log in 
 	 *  
 	 * @return	Account if it was successfully logged in, or "null" if it
 	 *          wasn't successfully logged in 
 	 */ 
-	public Account loginAccount(Account account) { 
-		return this.accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
+	public ResponseEntity<Account> loginAccount(Account account) {
+		Account loggedInAccount = this.accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
+
+		if (loggedInAccount != null) { // Account successfully logged in
+			return ResponseEntity.status(200).body(loggedInAccount);
+
+		} else { // Login failed / unauthorized
+			return ResponseEntity.status(401).body(null);
+		}
 	} 
 }
