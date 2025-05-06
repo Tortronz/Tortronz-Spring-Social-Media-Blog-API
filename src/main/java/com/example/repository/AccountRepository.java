@@ -16,25 +16,25 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface AccountRepository extends JpaRepository<Account, Long>{
-    /**
-     * Returns account with the specified ID.
-     * @param accountId
-     * @return  account with the specified ID
-     */
-    Account findByAccountId(int accountId);
+    /** 
+     * Returns account with the specified ID. 
+     * @param accountId 
+     * @return  account with the specified ID 
+     */ 
+     Account findByAccountId(int accountId); 
 
-    /**
-     * Returns account with the specified username.
-     * @param username
-     * @return  account with the specified username
-     */
-    Account findByUsername(String username);
+     /** 
+      * Returns account with the specified username. 
+      * @param username 
+      * @return  account with the specified username 
+      */ 
+     Account findByUsername(String username); 
 
-    /**
-     * Returns account with the specified username and password.
-     * @param username
-     * @param password
-     * @return  account with the specified username and password
-     */
-    Account findByUsernameAndPassword(String username, String password);
+     /** 
+      * Returns account with the specified username and password. 
+      * @param username 
+      * @param password 
+      * @return  account with the specified username and password 
+      */ 
+     Account findByUsernameAndPassword(String username, String password);
 }

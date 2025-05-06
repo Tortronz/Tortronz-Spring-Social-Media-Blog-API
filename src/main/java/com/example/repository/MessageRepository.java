@@ -1,6 +1,5 @@
 package com.example.repository;
 
-import com.example.entity.Account;
 import com.example.entity.Message;
 
 import java.util.List;
