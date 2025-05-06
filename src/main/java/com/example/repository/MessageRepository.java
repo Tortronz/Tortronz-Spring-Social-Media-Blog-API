@@ -1,6 +1,10 @@
 package com.example.repository;
 
+import com.example.entity.Account;
 import com.example.entity.Message;
+
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -18,4 +22,17 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long> {
+    /**
+     * Returns the message with the specified ID.
+     * @param messageId
+     * @return  message with the specified ID
+     */
+    Message findByMessageId(int messageId);
+
+    /**
+     * Returns a list of messages by the specified account.
+     * @param postedBy
+     * @return  list of messages by the specified account
+     */
+    List<Message> findAllByPostedBy(int postedBy);
 }
