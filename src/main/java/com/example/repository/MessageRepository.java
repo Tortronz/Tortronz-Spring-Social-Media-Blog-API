@@ -35,4 +35,11 @@ public interface MessageRepository extends JpaRepository<Message, Long> {
      * @return  list of messages by the specified account
      */
     List<Message> findAllByPostedBy(int postedBy);
+
+    /**
+     * Deletes the message with the specified ID.
+     * @param messageId
+     * @return  deleted message with the specified ID
+     */
+    int deleteByMessageId(int messageId);
 }

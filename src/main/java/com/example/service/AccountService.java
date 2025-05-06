@@ -3,6 +3,7 @@ package com.example.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.entity.Account;
 import com.example.repository.AccountRepository;
@@ -30,7 +31,8 @@ public class AccountService {
 	 * @return	Account if it was successfully persisted, or "null" if it 
 	 *          wasn't successfully persisted or if username or password were
 	 *          invalid 
-	 */ 
+	 */
+	@Transactional
 	public ResponseEntity<Account> registerAccount(Account account) { 
 		// Check username isn't blank 
 		if(account.getUsername() == "") { 
@@ -64,7 +66,8 @@ public class AccountService {
 	 *  
 	 * @return	Account if it was successfully logged in, or "null" if it
 	 *          wasn't successfully logged in 
-	 */ 
+	 */
+	@Transactional(readOnly = true)
 	public ResponseEntity<Account> loginAccount(Account account) {
 		Account loggedInAccount = this.accountRepository.findByUsernameAndPassword(account.getUsername(), account.getPassword());
 

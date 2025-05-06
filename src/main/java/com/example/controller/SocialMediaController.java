@@ -6,7 +6,9 @@ import java.util.Objects;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -111,7 +113,10 @@ public class SocialMediaController {
 	}
 
 	/** 
-	 * Handler to retrieve all messages. 
+	 * Handler to retrieve all messages.
+	 * 
+	 * Response message should always be 200 (OK), even if no messages are
+	 * returned.
 	 *  
 	 * @return	list of all messages
 	 */
@@ -121,7 +126,12 @@ public class SocialMediaController {
 	} 
  
 	/** 
-	 * Handler to retrieve all messages by a single account. 
+	 * Handler to retrieve all messages by a single account.
+	 * 
+	 * Response message should always be 200 (OK), even if no messages by
+	 * specified account are returned.
+	 * 
+	 * @param accountId	ID of the account to retrieve all messages of
 	 *  
 	 * @return	list of all messages by the specified account
 	 */
@@ -131,10 +141,12 @@ public class SocialMediaController {
 	} 
  
 	/** 
-	 * Handler to recieve a specific message by its ID. 
-	 *  
-	 * Even if the message with specified ID doesn't exist (and thus can't be 
-	 * retrieved), the API will return a 200 message (OK). 
+	 * Handler to recieve a specific message by its ID.
+	 * 
+	 * Response message should always be 200 (OK), even if the message with the
+	 * specified ID doesn't exist (and thus isn't returned).
+	 * 
+	 * @param messageId	ID of the message to retrieve
 	 *  
 	 * @return	message with the specified ID
 	 */
@@ -142,4 +154,38 @@ public class SocialMediaController {
 	public @ResponseBody ResponseEntity<Message> getMessageByIdHandler(@PathVariable int messageId) { 
 		return this.messageService.getMessage(messageId);
 	}
+
+	/** 
+	 * Handler for updating the body text of a pre-existing message. 
+	 *  
+	 * The message's updated body text must not be be blank, nor exceed 253 
+	 * characters in length (though the column of the database has a size of 
+	 * 255 bytes, the last 2 bytes are reserved for storing size). Failing to 
+	 * meet these requirements will cancel the PATCH and the API will return a 
+	 * 400 message (client error). 
+	 *  
+	 * @param messageId	ID of the message to update
+	 * 
+	 * @return	the number of rows updated
+	 */
+	@PatchMapping(value = "/messages/{messageId}")
+	public @ResponseBody ResponseEntity<String> patchUpdateMessageHandler(@PathVariable int messageId, @RequestBody Message message) { 
+		return this.messageService.updateMessageText(messageId, message);
+	} 
+ 
+	/** 
+	 * Handler for deleting a message. 
+	 *  
+	 * Response message should always be 200 (OK), even if the message with the
+	 * specified ID doesn't exist (and thus isn't deleted).
+	 *  
+	 * @param messageId	ID of the message to delete
+	 * 
+	 * @return	the number of rows deleted
+	 */
+	@DeleteMapping(value = "/messages/{messageId}")
+	public @ResponseBody ResponseEntity<String> deleteMessageHandler(@PathVariable int messageId) { 
+		return this.messageService.deleteMessageById(messageId);
+	} 
+
 }
