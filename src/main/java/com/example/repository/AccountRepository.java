@@ -1,6 +1,7 @@
 package com.example.repository;
 
 import com.example.entity.Account;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -28,7 +29,7 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
       * @param username 
       * @return  account with the specified username 
       */ 
-     Account findByUsername(String username); 
+      Account findByUsername(String username); 
 
      /** 
       * Returns account with the specified username and password. 
@@ -36,5 +37,5 @@ public interface AccountRepository extends JpaRepository<Account, Long>{
       * @param password 
       * @return  account with the specified username and password 
       */ 
-     Account findByUsernameAndPassword(String username, String password);
+      Account findByUsernameAndPassword(String username, String password);
 }
